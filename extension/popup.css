@@ -1,0 +1,7 @@
+body { width:330px;margin:0;padding:20px;background:#fffdf8;color:#252923;font:14px/1.6 system-ui,sans-serif; }
+h1 { margin:0 0 12px;font:30px Georgia,serif; }
+button { width:100%;padding:10px;border:0;border-radius:8px;background:#285645;color:#fff;cursor:pointer; }
+button:disabled { opacity:.6; }
+ol { padding-left:20px; } li { margin:8px 0; }
+#error { color:#a33c2d;overflow-wrap:anywhere; }
+.hint { color:#6b716b;font-size:12px; } code,a { color:#285645; }

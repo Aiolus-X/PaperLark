@@ -1,0 +1,4 @@
+interface:
+  display_name: "飞书应用开发"
+  short_description: "开发与排障飞书文档应用，处理评论、知识库权限、PDF 选区和真实验收"
+  default_prompt: "使用 $feishu-app-development 开发或排查飞书文档应用，并区分实现、自动化测试和真实租户验证。"

@@ -1,0 +1,24 @@
+import { randomBytes } from "node:crypto";
+import { existsSync, mkdirSync, readFileSync, writeFileSync, chmodSync } from "node:fs";
+import { dirname, resolve } from "node:path";
+import { config } from "../src/config.js";
+import { FeishuClient } from "../src/feishu-client.js";
+
+const client = new FeishuClient();
+const bot = await client.botInfo();
+const state = existsSync(config.dataPath) ? JSON.parse(readFileSync(config.dataPath, "utf8")) : {};
+const explicitReader = process.argv.find(argument => argument.startsWith("--reader="))?.slice("--reader=".length);
+const readers = [...new Set((state.jobs || []).map(([, job]) => job.event?.notice_meta?.from_user_id?.open_id).filter(value => value && value !== bot?.open_id))];
+const userId = explicitReader || (readers.length === 1 ? readers[0] : "");
+if (!/^ou_[a-zA-Z0-9]+$/.test(userId)) throw new Error("无法确定阅读者。请先在登记论文中用 /paper 留下一条评论，或使用 --reader=你的open_id");
+const existing = existsSync(config.browserBridgeConfigPath) ? JSON.parse(readFileSync(config.browserBridgeConfigPath, "utf8")) : null;
+const token = existing?.userId === userId && /^[a-f0-9]{64}$/.test(existing.token || "") ? existing.token : randomBytes(32).toString("hex");
+mkdirSync(dirname(config.browserBridgeConfigPath), { recursive: true, mode: 0o700 });
+writeFileSync(config.browserBridgeConfigPath, JSON.stringify({ token, userId }), { mode: 0o600 });
+chmodSync(config.browserBridgeConfigPath, 0o600);
+const destination = resolve("extension/connection.local.json");
+writeFileSync(destination, JSON.stringify({ baseUrl: `http://127.0.0.1:${config.port}`, token }), { mode: 0o600 });
+chmodSync(destination, 0o600);
+console.log("已生成本机扩展配对配置。模型密钥和飞书 App Secret 未复制到扩展。");
+console.log(`扩展目录：${resolve("extension")}`);
+console.log("重启 PaperLark 服务，在 Chrome/Edge 加载此扩展目录，然后刷新飞书论文页面。");

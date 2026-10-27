@@ -1,0 +1,15 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><title>PaperLark</title><link rel="stylesheet" href="popup.css"></head>
+<body>
+  <h1>PaperLark</h1>
+  <p id="status">正在检查本机服务…</p>
+  <p id="counts"></p>
+  <p id="document"></p>
+  <p id="highlights"></p>
+  <p id="error" role="alert"></p>
+  <button id="retry">检查连接并重试上传</button>
+  <ol><li>更新扩展后刷新飞书页面，已授权的 PDF/普通文档会自动接入。</li><li>选中文字评论 <code>/trans</code>；提问用 <code>/ask 问题</code>；讨论想法用 <code>/think 想法</code>。</li><li>在同一线程继续追问，AI 会结合之前的讨论回复。</li></ol>
+  <p class="hint">仅转发新建 PDF 评论的原文、页码和评论标识。不会读取登录 Cookie。首次启用前已有的评论，需要重新添加一次。</p>
+  <a href="http://127.0.0.1:8787" target="_blank" rel="noreferrer">打开本机状态页</a>
+  <script type="module" src="popup.js"></script>
+</body></html>

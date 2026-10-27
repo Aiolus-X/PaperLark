@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="zh-CN">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>PaperLark · 我的阅读设置</title><link rel="stylesheet" href="/app-assets/app.css"></head>
+<body>
+<main>
+  <header><a class="brand" href="/app">PaperLark<span>飞书论文阅读助手</span></a><a href="/status">连接状态</a></header>
+  <p id="notice" role="status" hidden></p>
+  <div id="settings">
+    <div class="intro"><h1>我的阅读设置</h1><p id="active">正在读取配置…</p><p>切换模型后，新的评论请求会使用新配置，无需重启服务。</p></div>
+    <section><div class="section-title"><span class="number">01</span><div><h2>模型服务</h2><p>可填写 Suwen、sub2api 或兼容服务。密钥仅保存在本机，保存后不再回显。</p></div></div>
+      <form id="model-form"><label>服务预设<select id="preset"><option value="custom">自定义兼容服务</option value="suwen">Suwen</option><option value="openai">OpenAI</option><option value="sub2api">sub2api</option></select></label>
+        <label>API 地址<input id="base-url" type="url" required placeholder="https://suwen.chatfold.pro/suwen/v1" autocomplete="off"></label>
+        <div class="row"><label>接口类型<select id="api"><option value="chat-completions">Chat Completions</option><option value="responses">Responses</option></select></label><label>推理强度<select id="effort"><option value="">不发送此参数</option><option value="none">none</option><option value="low">low</option><option value="medium">medium</option><option value="high">high</option><option value="xhigh">xhigh</option></select></label></div>
+        <label>模型名称<input id="model" required placeholder="填写服务商提供的模型 ID" autocomplete="off"></label>
+        <label>API Key<input id="api-key" type="password" placeholder="输入 API Key" autocomplete="new-password" maxlength="4096"></label>
+        <p id="key-state" class="hint"></p><p id="allowed-hosts" class="hint"></p>
+        <label class="check"><input id="enabled" type="checkbox" checked>使用我的模型配置</label><p id="default-model" class="hint"></p>
+        <div class="actions"><button type="submit">保存配置</button><button id="test-model" type="button" class="secondary">测试已保存配置</button><button id="delete-model" type="button" class="quiet">删除我的 Key</button></div>
+      </form>
+    </section>
+    <section class="commands"><h2>回到飞书，试试这些评论</h2><p><code>/trans</code> 翻译选区　<code>/ask 问题</code> 理解原文　<code>/think 想法</code> 讨论观点</p><p><code>/doc</code> 生成总结　<code>/add</code> 整理讨论　<code>/note 待办</code> 留下行动</p><p class="hint">AI 回复后，在同一评论线程直接追问即可。输出默认简洁，完整翻译和详细推导按你的要求处理。</p></section>
+  </div>
+  <footer>PaperLark · 个人试用版。设置页仅供本机访问。</footer>
+</main><script type="module" src="/app-assets/app.js"></script>
+</body></html>

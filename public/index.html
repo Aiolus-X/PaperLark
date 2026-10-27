@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PaperLark · 飞书连接状态</title>
+  <style>
+    body { background:#f5f2eb;color:#232323;font:16px/1.8 system-ui,sans-serif;margin:0; }
+    main { max-width:850px;margin:60px auto;padding:28px; }
+    h1 { font:54px Georgia,serif;letter-spacing:-2px; }
+    section { background:#fffdf8;border:1px solid #e4dfd5;padding:24px;border-radius:14px;margin:20px 0; }
+    code { color:#a53e26;overflow-wrap:anywhere; } pre { white-space:pre-wrap;overflow-wrap:anywhere;font-size:13px; }
+    .hint { color:#696969; } a { color:#a53e26; }
+  </style>
+</head>
+<body><main>
+  <h1>PaperLark</h1>
+  <p>在飞书中阅读论文，选中文字，在评论里调用 AI。</p>
+  <section><h2>连接状态</h2><p id="connection">正在检查…</p><p id="model"></p><pre id="details"></pre></section>
+  <section><h2>直接在飞书试用</h2>
+    <ol>
+      <li>在飞书开放平台创建自建应用，开启机器人、评论读取/回复、文档读取和文件下载权限。</li>
+      <li>将 App ID / App Secret 填入项目 <code>.env</code>，按 <code>docs/FEISHU_SETUP.md</code> 配置长连接事件订阅并发布应用。</li>
+      <li>将论文授权给应用，把论文链接填入 <code>FEISHU_WATCH_FILES</code>，启动服务。</li>
+      <li>在 Chrome/Edge 扩展管理页加载项目 <code>extension</code> 目录，然后刷新飞书论文网页。</li>
+      <li>在原 PDF 中选中文字，新建评论 <code>/trans</code>，等待“选区已关联”提示和原线程回复。</li>
+      <li>回复出现在原评论线程，可继续使用 <code>/think</code>、<code>/pol</code>。</li>
+    </ol>
+    <p class="hint">扩展捕获新建 PDF 评论的原文并按评论 ID 关联，不需要登录 Cookie。完整步骤见 <code>docs/BROWSER_EXTENSION.md</code>。未登记论文时，纯斜杠评论不保证产生通知事件；登记后默认每 15 秒检查全文及局部新评论。</p>
+  </section>
+</main>
+<script>
+  async function refresh() {
+    try {
+      const response = await fetch('/health');
+      const state = await response.json();
+      document.querySelector('#connection').textContent = state.feishuConfigured ? `飞书连接：${state.connection}` : '尚未配置飞书应用，当前不能在飞书中调用。';
+      document.querySelector('#model').textContent = `AI：${state.model} · ${state.reasoningEffort} · ${state.aiConfigured ? '已配置密钥' : '缺少密钥'}`;
+      document.querySelector('#details').textContent = JSON.stringify({error:state.startupError || undefined, browserBridge:state.browserBridge, watchErrors:state.watchErrors, papers:state.watches, recentTasks:state.jobs}, null, 2);
+    } catch { document.querySelector('#connection').textContent = '无法连接本地服务，请运行 npm start。'; }
+  }
+  refresh(); setInterval(refresh, 5000);
+</script></body></html>

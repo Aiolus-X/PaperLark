@@ -1,0 +1,25 @@
+{
+  "name": "paperlark",
+  "version": "0.1.0",
+  "private": true,
+  "description": "PaperLark: AI paper reading assistant for Feishu",
+  "type": "module",
+  "scripts": {
+    "start": "node --env-file-if-exists=.env src/server.js",
+    "doctor": "node --env-file-if-exists=.env scripts/doctor.js",
+    "extension:setup": "node --env-file-if-exists=.env scripts/setup-browser-extension.js",
+    "test": "node --test test/*.test.js",
+    "test:browser": "playwright test",
+    "check:public": "node scripts/check-public-files.js"
+  },
+  "engines": {
+    "node": ">=20.19"
+  },
+  "dependencies": {
+    "@larksuiteoapi/node-sdk": "1.76.0",
+    "pdfjs-dist": "4.10.38"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.64.1"
+  }
+}
